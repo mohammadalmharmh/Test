@@ -40,16 +40,28 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/forecastTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="4dp"
+            android:text="14:00"
+            android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+            android:textColor="@color/text_secondary"
+            app:layout_constraintStart_toEndOf="@id/forecastIcon"
+            app:layout_constraintTop_toBottomOf="@id/forecastDate" />
+
+        <TextView
             android:id="@+id/forecastTemp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:text="25°C"
             android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
             android:textColor="@color/primary"
             app:layout_constraintStart_toEndOf="@id/forecastIcon"
-            app:layout_constraintTop_toBottomOf="@id/forecastDate" />
+            app:layout_constraintTop_toBottomOf="@id/forecastTime" />
 
         <TextView
             android:id="@+id/forecastDescription"

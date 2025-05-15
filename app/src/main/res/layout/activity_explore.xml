@@ -73,7 +73,7 @@
                 android:src="@drawable/ic_star_outline"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/primary" />
+                app:tint="@color/secondary" />
 
             <!-- Weather Icon -->
             <ImageView
