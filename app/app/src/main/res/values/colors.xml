@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Common Colors -->
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Light Mode Colors -->
+    <color name="primary">#2196F3</color>
+    <color name="primary_variant">#1976D2</color>
+    <color name="background">#E3F2FD</color>
+    <color name="surface">#BBDEFB</color>
+    <color name="text_primary">#0D47A1</color>
+    <color name="text_secondary">#1565C0</color>
+    <color name="icon_tint">#1565C0</color>
+    <color name="nav_item_tint">#1565C0</color>
+    <color name="gradient_start">#42A5F5</color>
+    <color name="gradient_end">#1976D2</color>
+
+    <!-- Dark Mode Colors -->
+    <color name="primary_dark">#64B5F6</color>
+    <color name="primary_variant_dark">#42A5F5</color>
+    <color name="background_dark">#0D1B2A</color>
+    <color name="surface_dark">#1E3A8A</color>
+    <color name="text_primary_dark">#BBDEFB</color>
+    <color name="text_secondary_dark">#90CAF9</color>
+    <color name="icon_tint_dark">#90CAF9</color>
+    <color name="nav_item_tint_dark">#90CAF9</color>
+    <color name="gradient_start_dark">#4FC3F7</color>
+    <color name="gradient_end_dark">#0288D1</color>
+
+    <!-- Weather-based Colors -->
+    <color name="weather_sunny">#E3F2FD</color>
+    <color name="weather_cloudy">#BBDEFB</color>
+    <color name="weather_rainy">#90CAF9</color>
+    <color name="weather_snowy">#64B5F6</color>
+    <color name="weather_misty">#42A5F5</color>
+    <color name="weather_thunderstorm">#2196F3</color>
+    <color name="weather_default">#E3F2FD</color>
+</resources>
