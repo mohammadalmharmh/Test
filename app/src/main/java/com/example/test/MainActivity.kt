@@ -283,6 +283,7 @@ class MainActivity : AppCompatActivity() {
                     errorData.postValue("Network error: ${t.localizedMessage}")
                 }
             })
+
         }
 
         fun fetchWeatherByCity(city: String) {
