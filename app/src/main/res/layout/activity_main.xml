@@ -1,17 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_background"
     android:animateLayoutChanges="true">
+
+    <!-- Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@drawable/bar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:orientation="horizontal"
+            android:paddingEnd="16dp">
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/refreshButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Refresh"
+                app:srcCompat="@drawable/ic_refresh"
+                android:scaleType="fitCenter"
+                android:padding="12dp"
+                android:layout_marginEnd="8dp"
+                 />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/themeToggleButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Toggle Theme"
+                app:srcCompat="@drawable/ic_moon"
+                android:scaleType="fitCenter"
+                android:padding="12dp"
+                 />
+        </LinearLayout>
+    </androidx.appcompat.widget.Toolbar>
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintBottom_toTopOf="@id/bottomNav"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -34,6 +78,7 @@
                 app:cardBackgroundColor="@android:color/transparent">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/weatherCardContent"
                     android:layout_width="match_parent"
                     android:layout_height="220dp"
                     android:background="@drawable/hero_gradient"
@@ -45,22 +90,10 @@
                         android:layout_height="wrap_content"
                         android:text="City, Country"
                         android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
-                        android:textColor="@color/surface"
-                        app:layout_constraintEnd_toStartOf="@id/refreshButton"
-                        app:layout_constraintHorizontal_bias="0"
+                        android:textColor="?android:textColorPrimary"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageButton
-                        android:id="@+id/refreshButton"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="Refresh"
-                        android:src="@drawable/ic_refresh"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@color/surface" />
 
                     <ImageView
                         android:id="@+id/weatherIcon"
@@ -68,18 +101,19 @@
                         android:layout_height="80dp"
                         android:layout_marginTop="12dp"
                         android:contentDescription="Weather icon"
-                        android:src="@drawable/ic_default_weather"
+                        app:srcCompat="@drawable/ic_default_weather"
+                        app:tint="?android:textColorPrimary"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/currentCityText" />
 
                     <TextView
                         android:id="@+id/currentWeatherText"
-                        android:layout_width="180dp"
+                        android:layout_width="0dp"
                         android:layout_height="80dp"
                         android:layout_marginStart="12dp"
                         android:text="25°C"
                         android:textAppearance="@style/TextAppearance.Material3.DisplayMedium"
-                        android:textColor="@color/surface"
+                        android:textColor="?android:textColorPrimary"
                         app:layout_constraintBottom_toBottomOf="@id/weatherIcon"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/weatherIcon"
@@ -92,7 +126,7 @@
                         android:layout_marginTop="12dp"
                         android:text="Clear Sky"
                         android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-                        android:textColor="@color/surface"
+                        android:textColor="?android:textColorPrimary"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/weatherIcon" />
@@ -107,11 +141,12 @@
                 android:layout_marginBottom="16dp"
                 app:cardCornerRadius="24dp"
                 app:cardElevation="8dp"
-                app:cardBackgroundColor="@color/surface">
+                app:cardBackgroundColor="?colorSurface">
 
                 <LinearLayout
+                    android:id="@+id/detailsCardContent"
                     android:layout_width="match_parent"
-                    android:layout_height="308dp"
+                    android:layout_height="wrap_content"
                     android:divider="?android:attr/dividerHorizontal"
                     android:orientation="vertical"
                     android:padding="16dp"
@@ -129,7 +164,8 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:contentDescription="Feels Like"
-                            android:src="@drawable/ic_feels_like" />
+                            app:srcCompat="@drawable/ic_feels_like"
+                            app:tint="?android:textColorPrimary" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -137,14 +173,16 @@
                             android:layout_marginStart="12dp"
                             android:layout_weight="1"
                             android:text="Feels Like"
-                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
+                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                            android:textColor="?android:textColorPrimary" />
 
                         <TextView
                             android:id="@+id/feelsLikeText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="27°C"
-                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
+                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                            android:textColor="?android:textColorPrimary" />
                     </LinearLayout>
 
                     <!-- Temp Range -->
@@ -159,7 +197,8 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:contentDescription="Temp Range"
-                            android:src="@drawable/ic_temp_range" />
+                            app:srcCompat="@drawable/ic_temp_range"
+                            app:tint="?android:textColorPrimary" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -167,14 +206,16 @@
                             android:layout_marginStart="12dp"
                             android:layout_weight="1"
                             android:text="Temp Range"
-                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
+                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                            android:textColor="?android:textColorPrimary" />
 
                         <TextView
                             android:id="@+id/tempRangeText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="21°C - 29°C"
-                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
+                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                            android:textColor="?android:textColorPrimary" />
                     </LinearLayout>
 
                     <!-- Wind Speed -->
@@ -189,7 +230,8 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:contentDescription="Wind Speed"
-                            android:src="@drawable/ic_wind_speed" />
+                            app:srcCompat="@drawable/ic_wind_speed"
+                            app:tint="?android:textColorPrimary" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -197,14 +239,16 @@
                             android:layout_marginStart="12dp"
                             android:layout_weight="1"
                             android:text="Wind Speed"
-                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
+                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                            android:textColor="?android:textColorPrimary" />
 
                         <TextView
                             android:id="@+id/windSpeedText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="15 km/h"
-                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
+                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                            android:textColor="?android:textColorPrimary" />
                     </LinearLayout>
 
                     <!-- Humidity -->
@@ -219,7 +263,8 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:contentDescription="Humidity"
-                            android:src="@drawable/ic_humidity" />
+                            app:srcCompat="@drawable/ic_humidity"
+                            app:tint="?android:textColorPrimary" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -227,14 +272,16 @@
                             android:layout_marginStart="12dp"
                             android:layout_weight="1"
                             android:text="Humidity"
-                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
+                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                            android:textColor="?android:textColorPrimary" />
 
                         <TextView
                             android:id="@+id/humidityText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="60%"
-                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
+                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                            android:textColor="?android:textColorPrimary" />
                     </LinearLayout>
 
                     <!-- Pressure -->
@@ -249,7 +296,8 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:contentDescription="Pressure"
-                            android:src="@drawable/ic_pressure" />
+                            app:srcCompat="@drawable/ic_pressure"
+                            app:tint="?android:textColorPrimary" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -257,14 +305,16 @@
                             android:layout_marginStart="12dp"
                             android:layout_weight="1"
                             android:text="Pressure"
-                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
+                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                            android:textColor="?android:textColorPrimary" />
 
                         <TextView
                             android:id="@+id/pressureText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="1013 hPa"
-                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
+                            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                            android:textColor="?android:textColorPrimary" />
                     </LinearLayout>
 
                     <!-- Last Updated -->
@@ -275,17 +325,17 @@
                         android:layout_marginTop="12dp"
                         android:text="Last Updated: May 12, 4:20 PM"
                         android:textAlignment="center"
-                        android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
+                        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+                        android:textColor="?android:textColorPrimary" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
-
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="338dp"
+        android:layout_height="71dp"
         android:layout_margin="16dp"
         android:background="@drawable/bottom_nav_background"
         app:itemIconSize="28dp"
@@ -293,8 +343,8 @@
         app:itemTextColor="@color/nav_item_tint"
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_nav_menu" />
 
     <ProgressBar

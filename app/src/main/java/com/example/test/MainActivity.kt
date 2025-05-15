@@ -6,16 +6,21 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
+import androidx.core.view.children
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.location.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
@@ -43,20 +48,29 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        Log.d("MainActivity", "Before setContentView")
+        try {
+            setContentView(R.layout.activity_main)
+            Log.d("MainActivity", "After setContentView")
+        } catch (e: Exception) {
+            Log.e("MainActivity", "Error inflating layout: ${e.message}", e)
+            throw e
+        }
 
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         databaseHelper = DatabaseHelper(this)
-
         setupBottomNavigation()
         setupRefreshButton()
+        setupThemeToggle()
         observeWeatherData()
         requestLocationPermissions()
     }
 
     private fun setupBottomNavigation() {
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNav)
-        bottomNav.setOnItemSelectedListener { item ->
+        bottomNav?.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> true
                 R.id.nav_explore -> {
@@ -65,7 +79,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.nav_favorites -> {
                     showFavoritesDialog()
-                    false // Keep home selected
+                    false
                 }
                 else -> false
             }
@@ -73,9 +87,35 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupRefreshButton() {
-        findViewById<ImageButton>(R.id.refreshButton).setOnClickListener {
+        findViewById<ImageButton>(R.id.refreshButton)?.setOnClickListener {
             requestLocationPermissions()
         }
+    }
+
+    private fun setupThemeToggle() {
+        val themeToggle = findViewById<ImageButton>(R.id.themeToggleButton)
+        if (themeToggle == null) {
+            Log.e("MainActivity", "themeToggleButton is null")
+            return
+        }
+        updateThemeToggleIcon()
+        themeToggle.setOnClickListener {
+            val currentMode = AppCompatDelegate.getDefaultNightMode()
+            if (currentMode == AppCompatDelegate.MODE_NIGHT_YES) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            }
+            updateThemeToggleIcon()
+        }
+    }
+
+    private fun updateThemeToggleIcon() {
+        val themeToggle = findViewById<ImageButton>(R.id.themeToggleButton)
+        themeToggle?.setImageResource(
+            if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)
+                R.drawable.ic_sun else R.drawable.ic_moon
+        )
     }
 
     private fun showFavoritesDialog() {
@@ -99,7 +139,7 @@ class MainActivity : AppCompatActivity() {
         weatherViewModel.isLoading.observe(this) { isLoading ->
             findViewById<ProgressBar>(R.id.loadingIndicator).visibility =
                 if (isLoading) View.VISIBLE else View.GONE
-            findViewById<com.google.android.material.card.MaterialCardView>(R.id.weatherCard).visibility =
+            findViewById<MaterialCardView>(R.id.weatherCard).visibility =
                 if (isLoading) View.INVISIBLE else View.VISIBLE
         }
 
