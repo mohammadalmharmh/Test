@@ -23,6 +23,7 @@
 
         <activity
             android:name=".ExploreActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" /> <!-- Main Activity -->
         <activity
             android:name=".MainActivity"

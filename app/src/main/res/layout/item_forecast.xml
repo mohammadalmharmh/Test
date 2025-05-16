@@ -2,13 +2,13 @@
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardView"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     android:foreground="?android:attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
-    app:cardBackgroundColor="@color/surface"
     app:cardCornerRadius="12dp"
     app:cardElevation="4dp">
 
@@ -35,7 +35,6 @@
             android:layout_marginStart="12dp"
             android:text="May 13, Tue"
             android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-            android:textColor="@color/text_primary"
             app:layout_constraintStart_toEndOf="@id/forecastIcon"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -47,7 +46,6 @@
             android:layout_marginTop="16dp"
             android:text="25°C"
             android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
-            android:textColor="@color/primary"
             app:layout_constraintStart_toEndOf="@id/forecastIcon"
             app:layout_constraintTop_toBottomOf="@id/forecastDate" />
 
@@ -59,7 +57,6 @@
             android:layout_marginTop="8dp"
             android:text="Clear Sky"
             android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-            android:textColor="@color/text_secondary"
             app:layout_constraintStart_toEndOf="@id/forecastIcon"
             app:layout_constraintTop_toBottomOf="@id/forecastTemp" />
 
@@ -71,7 +68,6 @@
             android:layout_marginTop="8dp"
             android:text="Humidity: 60%"
             android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-            android:textColor="@color/text_secondary"
             app:layout_constraintStart_toEndOf="@id/forecastIcon"
             app:layout_constraintTop_toBottomOf="@id/forecastDescription" />
     </androidx.constraintlayout.widget.ConstraintLayout>

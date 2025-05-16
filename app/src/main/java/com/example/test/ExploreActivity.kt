@@ -2,6 +2,7 @@ package com.example.test
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
@@ -24,8 +25,14 @@ class ExploreActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityExploreBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        try {
+            binding = ActivityExploreBinding.inflate(layoutInflater)
+            setContentView(binding.root)
+            Log.d("ExploreActivity", "Layout inflated successfully")
+        } catch (e: Exception) {
+            Log.e("ExploreActivity", "Error inflating layout: ${e.message}", e)
+            throw e
+        }
 
         databaseHelper = DatabaseHelper(this)
 
@@ -34,6 +41,28 @@ class ExploreActivity : AppCompatActivity() {
         setupRecyclerView()
         setupFavoriteButton()
         observeViewModel()
+        applyThemeSafely()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Only re-apply theme if necessary (e.g., after theme toggle)
+        applyThemeSafely()
+        Log.d("ExploreActivity", "Theme checked in onResume")
+    }
+
+    private fun applyThemeSafely() {
+        val rootView = binding.root
+        if (rootView != null) {
+            try {
+                ThemeUtils.applyTheme(this, rootView)
+                Log.d("ExploreActivity", "Theme applied successfully")
+            } catch (e: Exception) {
+                Log.e("ExploreActivity", "Error applying theme: ${e.message}", e)
+            }
+        } else {
+            Log.e("ExploreActivity", "Root view is null, skipping theme application")
+        }
     }
 
     private fun setupSearch() {

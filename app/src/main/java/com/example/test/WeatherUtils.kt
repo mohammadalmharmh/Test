@@ -1,5 +1,6 @@
 package com.example.test
 
+import androidx.appcompat.app.AppCompatDelegate
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -28,16 +29,11 @@ object WeatherUtils {
     }
 
     /**
-     * Converts a weather icon code to a background color resource ID for ConstraintLayout.
+     * Returns a background color resource ID for ConstraintLayout based on theme mode.
      */
-    fun String.toWeatherBackgroundColor(): Int = when (this) {
-        "01d", "01n" -> R.color.weather_sunny
-        "02d", "02n", "03d", "03n", "04d", "04n" -> R.color.weather_cloudy
-        "09d", "09n", "10d", "10n" -> R.color.weather_rainy
-        "11d", "11n" -> R.color.weather_thunderstorm
-        "13d", "13n" -> R.color.weather_snowy
-        "50d", "50n" -> R.color.weather_misty
-        else -> R.color.weather_default
+    fun String.toWeatherBackgroundColor(): Int {
+        val isDarkMode = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
+        return if (isDarkMode) R.color.surface_dark else R.color.surface
     }
 
     /**

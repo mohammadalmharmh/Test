@@ -14,8 +14,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.view.children
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -27,9 +25,6 @@ import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
-import android.graphics.PorterDuff
-import android.content.res.ColorStateList
-import androidx.constraintlayout.widget.ConstraintLayout
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -52,10 +47,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("MainActivity", "Before setContentView")
         try {
             setContentView(R.layout.activity_main)
-            Log.d("MainActivity", "After setContentView")
         } catch (e: Exception) {
             Log.e("MainActivity", "Error inflating layout: ${e.message}", e)
             throw e
@@ -70,7 +63,7 @@ class MainActivity : AppCompatActivity() {
         setupThemeToggle()
         observeWeatherData()
         requestLocationPermissions()
-        applyManualThemeChanges() // Apply initial theme
+        ThemeUtils.applyTheme(this, findViewById(R.id.mainLayout)) // Apply initial theme
     }
 
     private fun setupBottomNavigation() {
@@ -96,23 +89,35 @@ class MainActivity : AppCompatActivity() {
             requestLocationPermissions()
         }
     }
+    private fun loadThemePreference() {
+        val prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE)
+        val isDarkMode = prefs.getBoolean("isDarkMode", false)
+        AppCompatDelegate.setDefaultNightMode(
+            if (isDarkMode) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+        )
+    }
+
+    private fun saveThemePreference(isDarkMode: Boolean) {
+        val prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE)
+        prefs.edit().putBoolean("isDarkMode", isDarkMode).apply()
+    }
 
     private fun setupThemeToggle() {
-        val themeToggle = findViewById<ImageButton>(R.id.themeToggleButton)
-        if (themeToggle == null) {
+        val themeToggle = findViewById<ImageButton>(R.id.themeToggleButton) ?: run {
             Log.e("MainActivity", "themeToggleButton is null")
             return
         }
         updateThemeToggleIcon()
         themeToggle.setOnClickListener {
             val currentMode = AppCompatDelegate.getDefaultNightMode()
-            if (currentMode == AppCompatDelegate.MODE_NIGHT_YES) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            }
+            AppCompatDelegate.setDefaultNightMode(
+                if (currentMode == AppCompatDelegate.MODE_NIGHT_YES)
+                    AppCompatDelegate.MODE_NIGHT_NO
+                else
+                    AppCompatDelegate.MODE_NIGHT_YES
+            )
             updateThemeToggleIcon()
-            applyManualThemeChanges() // Apply theme changes after toggle
+            ThemeUtils.applyTheme(this, findViewById(R.id.mainLayout)) // Apply theme after toggle
         }
     }
 
@@ -122,66 +127,6 @@ class MainActivity : AppCompatActivity() {
             if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)
                 R.drawable.ic_sun else R.drawable.ic_moon
         )
-    }
-
-    private fun applyManualThemeChanges() {
-        Log.d("MainActivity", "Applying theme changes")
-        val mainLayout = findViewById<ConstraintLayout>(R.id.mainLayout)
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        val weatherCard = findViewById<MaterialCardView>(R.id.weatherCard)
-        val detailsCard = findViewById<MaterialCardView>(R.id.detailsCard)
-        val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNav)
-        val refreshButton = findViewById<ImageButton>(R.id.refreshButton)
-        val themeToggleButton = findViewById<ImageButton>(R.id.themeToggleButton)
-        val weatherIcon = findViewById<ImageView>(R.id.weatherIcon)
-
-        if (mainLayout == null || toolbar == null || weatherCard == null || detailsCard == null ||
-            bottomNav == null || refreshButton == null || themeToggleButton == null || weatherIcon == null) {
-            Log.e("MainActivity", "One or more views are null")
-            return
-        }
-
-        val isDarkMode = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
-        val textColor = ContextCompat.getColor(this, if (isDarkMode) R.color.text_primary_dark else R.color.text_primary)
-        val iconTint = ContextCompat.getColor(this, if (isDarkMode) R.color.icon_tint_dark else R.color.icon_tint)
-        val navItemTint = ContextCompat.getColor(this, if (isDarkMode) R.color.nav_item_tint_dark else R.color.nav_item_tint)
-        val surfaceColor = ContextCompat.getColor(this, if (isDarkMode) R.color.surface_dark else R.color.surface)
-
-        // Update backgrounds
-        mainLayout.setBackgroundResource(if (isDarkMode) R.drawable.gradient_background_dark else R.drawable.gradient_background)
-        toolbar.setBackgroundResource(if (isDarkMode) R.drawable.bar_dark else R.drawable.bar)
-        val weatherCardContent = weatherCard.findViewById<ConstraintLayout>(R.id.weatherCardContent)
-        if (weatherCardContent != null) {
-            weatherCardContent.setBackgroundResource(if (isDarkMode) R.drawable.hero_gradient_dark else R.drawable.hero_gradient)
-        } else {
-            Log.e("MainActivity", "weatherCardContent is null")
-        }
-        detailsCard.setCardBackgroundColor(surfaceColor)
-        bottomNav.setBackgroundResource(if (isDarkMode) R.drawable.bottom_nav_background_dark else R.drawable.bottom_nav_background)
-
-        // Update text colors in weatherCard (kept white for contrast)
-        listOf(R.id.currentCityText, R.id.currentWeatherText, R.id.weatherDescription).forEach { id ->
-            weatherCard.findViewById<TextView>(id)?.setTextColor(ContextCompat.getColor(this, R.color.white))
-        }
-
-        // Update text and icon colors in detailsCard
-        detailsCard.findViewById<LinearLayout>(R.id.detailsCardContent)?.children?.forEach { view ->
-            if (view is LinearLayout) {
-                view.children.forEach { child ->
-                    if (child is TextView) child.setTextColor(textColor)
-                    if (child is ImageView) child.setColorFilter(iconTint, PorterDuff.Mode.SRC_IN)
-                }
-            }
-        }
-
-        // Update icon tints
-        refreshButton.setColorFilter(iconTint, PorterDuff.Mode.SRC_IN)
-        themeToggleButton.setColorFilter(iconTint, PorterDuff.Mode.SRC_IN)
-        weatherIcon.setColorFilter(iconTint, PorterDuff.Mode.SRC_IN)
-
-        // Update BottomNavigationView
-        bottomNav.itemIconTintList = ColorStateList.valueOf(navItemTint)
-        bottomNav.itemTextColor = ColorStateList.valueOf(navItemTint)
     }
 
     private fun showFavoritesDialog() {
