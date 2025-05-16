@@ -71,10 +71,12 @@ class ForecastAdapter(
                 icon.setImageResource(
                     forecast.weather.firstOrNull()?.icon?.toWeatherIcon() ?: R.drawable.ic_default_weather
                 )
-                icon.setColorFilter(iconTint, android.graphics.PorterDuff.Mode.SRC_IN)
+                icon.clearColorFilter() // Skip tinting to preserve original icon color
+                Log.d("ForecastAdapter", "Preserved original color for forecastIcon at position $position")
             } catch (e: Exception) {
                 Log.e("ForecastAdapter", "Error setting icon: ${e.message}")
                 icon.setImageResource(R.drawable.ic_default_weather)
+                icon.clearColorFilter()
             }
 
             try {

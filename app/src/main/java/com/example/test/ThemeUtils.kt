@@ -64,10 +64,16 @@ object ThemeUtils {
                             Log.d("ThemeUtils", "Set text color for ID $id to ${if (isDarkMode) "text_primary_dark" else "text_primary"}")
                         }
                     }
+                // Update favorite button (apply tint)
+                weatherCard.findViewById<ImageButton>(R.id.favoriteButton)?.let { button ->
+                    button.setColorFilter(iconTint, PorterDuff.Mode.SRC_IN)
+                    Log.d("ThemeUtils", "Set favoriteButton tint to ${if (isDarkMode) "icon_tint_dark" else "icon_tint"}")
+                } ?: Log.w("ThemeUtils", "favoriteButton not found")
+                // Skip tinting weatherIcon to preserve original color
                 weatherCard.findViewById<ImageView>(R.id.weatherIcon)?.let { icon ->
-                    icon.setColorFilter(iconTint, PorterDuff.Mode.SRC_IN)
-                    Log.d("ThemeUtils", "Set weatherIcon tint")
-                }
+                    icon.clearColorFilter() // Ensure no tint is applied
+                    Log.d("ThemeUtils", "Preserved original color for weatherIcon")
+                } ?: Log.w("ThemeUtils", "weatherIcon not found")
             } ?: Log.e("ThemeUtils", "weatherCard not found, skipping styling")
 
             // Update details card (MainActivity only)
