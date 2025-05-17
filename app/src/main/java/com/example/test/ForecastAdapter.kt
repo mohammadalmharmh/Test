@@ -12,6 +12,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.test.WeatherUtils.toFormattedDate
+import com.example.test.WeatherUtils.toFormattedTime
 import com.example.test.WeatherUtils.toWeatherBackgroundColor
 import com.example.test.WeatherUtils.toWeatherIcon
 import com.google.android.material.card.MaterialCardView
@@ -24,6 +25,7 @@ class ForecastAdapter(
         val cardView: MaterialCardView? = itemView.findViewById(R.id.cardView)
         val container: ConstraintLayout = itemView.findViewById(R.id.forecastContainer)
         val dateText: TextView = itemView.findViewById(R.id.forecastDate)
+        val timeText: TextView = itemView.findViewById(R.id.forecastTime)
         val tempText: TextView = itemView.findViewById(R.id.forecastTemp)
         val descriptionText: TextView = itemView.findViewById(R.id.forecastDescription)
         val icon: ImageView = itemView.findViewById(R.id.forecastIcon)
@@ -61,6 +63,8 @@ class ForecastAdapter(
 
             dateText.text = forecast.dt.toFormattedDate()
             dateText.setTextColor(textColor)
+            timeText.text = forecast.dt.toFormattedTime()
+            timeText.setTextColor(secondaryTextColor)
             tempText.text = "${forecast.main.temp}°C"
             tempText.setTextColor(ContextCompat.getColor(context, if (isDarkMode) R.color.primary_dark else R.color.primary))
             descriptionText.text = forecast.weather.firstOrNull()?.description.orEmpty()
@@ -90,7 +94,7 @@ class ForecastAdapter(
                 Log.e("ForecastAdapter", "Error setting container background: ${e.message}")
                 container.background = ColorDrawable(ContextCompat.getColor(context, if (isDarkMode) R.color.surface_dark else R.color.primary))
             }
-            Log.d("ForecastAdapter", "Bound item at position $position, date: ${dateText.text}, temp: ${tempText.text}")
+            Log.d("ForecastAdapter", "Bound item at position $position, date: ${dateText.text}, time: ${timeText.text}, temp: ${tempText.text}")
         }
     }
 

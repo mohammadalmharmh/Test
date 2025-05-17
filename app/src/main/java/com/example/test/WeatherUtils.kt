@@ -41,4 +41,10 @@ object WeatherUtils {
      */
     fun Long.toFormattedDate(): String =
         SimpleDateFormat("MMM dd, EEE", Locale.getDefault()).format(Date(this * 1000L))
+
+    /**
+     * Formats a Unix timestamp (in seconds) to a time string like "HH:mm".
+     */
+    fun Long.toFormattedTime(): String =
+        SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(this * 1000L))
 }
